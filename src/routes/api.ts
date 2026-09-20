@@ -16,6 +16,11 @@ import {
   adminUpdateGame,
   adminUpdateContent,
 } from '../controllers/adminController';
+import {
+  syncGoogleUser,
+  updateUserProfile,
+  getUserProfile,
+} from '../controllers/userController';
 import { adminAuth } from '../middleware/adminAuth';
 
 const router = Router();
@@ -25,6 +30,11 @@ router.get('/games', getGames);
 router.get('/games/:gameId', getGameById);
 router.get('/games/:gameId/content', getGameContent);
 router.get('/games/:gameId/version', getGameVersion);
+
+// User Profile & Google Auth API
+router.post('/users/google-sync', syncGoogleUser);
+router.put('/users/profile', updateUserProfile);
+router.get('/users/:userId', getUserProfile);
 
 // User Progress & Analytics Event API
 router.post('/progress', syncProgress);

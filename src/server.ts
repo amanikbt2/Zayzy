@@ -1,5 +1,4 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -11,7 +10,6 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pocket_arcade';
 
 // Security Middleware
 app.use(helmet({ contentSecurityPolicy: false }));
@@ -33,7 +31,7 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     service: 'Pocket Arcade Backend',
     timestamp: new Date().toISOString(),
-    dbConnected: mongoose.connection.readyState === 1,
+    mode: 'Local Database Mode',
   });
 });
 
@@ -48,13 +46,9 @@ app.get('/', (req, res) => {
   res.send('[Pocket Arcade] API Server is running. Access Admin at /admin');
 });
 
-// Database Connection & Server Initialization
-async function startServer() {
+// Server Initialization
+function startServer() {
   try {
-    console.log('Connecting to MongoDB database...');
-    await mongoose.connect(MONGODB_URI);
-    console.log('Successfully connected to MongoDB.');
-
     app.listen(PORT, () => {
       console.log(`[SERVER] Pocket Arcade Server running on port ${PORT}`);
       console.log(`[ADMIN] Admin Dashboard: http://localhost:${PORT}/admin`);
